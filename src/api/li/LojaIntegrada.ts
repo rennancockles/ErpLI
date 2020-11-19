@@ -2,6 +2,7 @@ import { ILojaIntegrada } from "./interfaces/ILojaIntegrada"
 import { ILojaIntegradaAPI } from "./interfaces/ILojaIntegradaAPI"
 import { IDefaultParams, IListarPedidosParams } from "./interfaces/Params"
 import { IAtualizacaoDetalhadaResponse, IHistoricoSituacaoObject, IPedidoDetalheResponse, IPedidoResponseObject } from "./interfaces/Responses"
+import { IResumoResponse } from "./interfaces/Responses/IResumoResponse"
 import { LojaIntegradaAPI } from "./LojaIntegradaAPI"
 
 export class LojaIntegrada implements ILojaIntegrada {
@@ -47,7 +48,7 @@ export class LojaIntegrada implements ILojaIntegrada {
     return detalhes
   }
 
-  async atualizacoes_por_data(date: string, offset: number = 0): Promise<IHistoricoSituacaoObject[]> {
+  async atualizacoes(date: string, offset: number = 0): Promise<IHistoricoSituacaoObject[]> {
     const params: IDefaultParams = { offset }
 
     const response = await this.api.historico_situacao(params)
@@ -61,22 +62,23 @@ export class LojaIntegrada implements ILojaIntegrada {
     })
 
     if (response.meta.total_count !== response.objects.length && response.meta.next && lastObjectDate <= desiredDate) {
-      const proximasAtualizacoes = await this.atualizacoes_por_data(date, offset + 20)
+      const proximasAtualizacoes = await this.atualizacoes(date, offset + 20)
       atualizacoes.push(...proximasAtualizacoes)
     }
 
     return atualizacoes
   }
 
-  async atualizacoes_detalhadas_por_data(date: string): Promise<IAtualizacaoDetalhadaResponse[]> {
+  async atualizacoes_detalhadas(date: string): Promise<IAtualizacaoDetalhadaResponse[]> {
     const detalhes = []
-    const atualizacoes = await this.atualizacoes_por_data(date)
+    const atualizacoes = await this.atualizacoes(date)
 
     for (let index = 0; index < atualizacoes.length; index++) {
       const atualizacao = atualizacoes[index]
       const pedidoDetalhado = await this.api.detalhes_do_pedido(atualizacao.numero)
 
       detalhes.push({
+        data: date,
         situacao: atualizacao.situacao.codigo,
         situacao_anterior: atualizacao.situacao_anterior.codigo,
         pedido: pedidoDetalhado,
@@ -85,5 +87,35 @@ export class LojaIntegrada implements ILojaIntegrada {
     }
 
     return detalhes
+  }
+
+  async resumo_atualizacoes(date: string): Promise<IResumoResponse[]> {
+    const atualizacoes = await this.atualizacoes_detalhadas(date)
+    const resumoResponseArray: IResumoResponse[] = []
+
+    for (let index = 0; index < atualizacoes.length; index++) {
+      const atualizacao = atualizacoes[index];
+      let resumoResponse = resumoResponseArray.find(res => res.situacao === atualizacao.situacao)
+      
+      if (!resumoResponse) {
+        resumoResponse = {
+          situacao: atualizacao.situacao,
+          quantidade: 0,
+          valor_total: 0,
+          pedidos: []
+        }
+        resumoResponseArray.push(resumoResponse)
+      } 
+      
+      resumoResponse.quantidade += 1
+      resumoResponse.valor_total += parseFloat(atualizacao.pedido.valor_total)
+      resumoResponse.pedidos.push(atualizacao.pedido)
+    }
+
+    return resumoResponseArray
+  }
+
+  detalhe_pedido(id: number): Promise<IPedidoDetalheResponse> {
+    return this.api.detalhes_do_pedido(id)
   }
 }
