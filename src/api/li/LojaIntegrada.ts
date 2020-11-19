@@ -1,7 +1,7 @@
 import { ILojaIntegrada } from "./interfaces/ILojaIntegrada"
 import { ILojaIntegradaAPI } from "./interfaces/ILojaIntegradaAPI"
 import { IDefaultParams, IListarPedidosParams } from "./interfaces/Params"
-import { IHistoricoSituacaoObject, IPedidoDetalheResponse, IPedidoResponseObject } from "./interfaces/Responses"
+import { IAtualizacaoDetalhadaResponse, IHistoricoSituacaoObject, IPedidoDetalheResponse, IPedidoResponseObject } from "./interfaces/Responses"
 import { LojaIntegradaAPI } from "./LojaIntegradaAPI"
 
 export class LojaIntegrada implements ILojaIntegrada {
@@ -66,5 +66,24 @@ export class LojaIntegrada implements ILojaIntegrada {
     }
 
     return atualizacoes
+  }
+
+  async atualizacoes_detalhadas_por_data(date: string): Promise<IAtualizacaoDetalhadaResponse[]> {
+    const detalhes = []
+    const atualizacoes = await this.atualizacoes_por_data(date)
+
+    for (let index = 0; index < atualizacoes.length; index++) {
+      const atualizacao = atualizacoes[index]
+      const pedidoDetalhado = await this.api.detalhes_do_pedido(atualizacao.numero)
+
+      detalhes.push({
+        situacao: atualizacao.situacao.codigo,
+        situacao_anterior: atualizacao.situacao_anterior.codigo,
+        pedido: pedidoDetalhado,
+        atualizacao
+      })
+    }
+
+    return detalhes
   }
 }

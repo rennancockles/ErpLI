@@ -9,7 +9,7 @@ export interface IHistoricoSituacaoObject {
   obs: string
   resource_uri: string
   situacao: ISituacao
-  situacao_anterrior: ISituacao
+  situacao_anterior: ISituacao
 }
 
 export interface IHistoricoSituacaoResponse {
