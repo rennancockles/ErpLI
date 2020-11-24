@@ -1,39 +1,43 @@
 import { Request, Response } from 'express';
-import { LojaIntegrada } from "../api/li/LojaIntegrada";
+import { ILojaIntegrada } from '../api/li/interfaces/ILojaIntegrada';
 
-const api_key = process.env.LI_API_KEY || ''
-const LI = new LojaIntegrada(api_key)
-const today = new Date().toISOString().split('T')[0]
+export class LojaIntegradaController {
+  private today: string
+  private LI: ILojaIntegrada
 
-export default {
-  async atualizacoes (req: Request, res: Response) {
-    const date = req.query.date || today
+  constructor (LI: ILojaIntegrada) {
+    this.LI = LI
+    this.today = new Date().toISOString().split('T')[0]
+  }
 
-    const result = await LI.atualizacoes_detalhadas(date.toString())
+  atualizacoes = async (req: Request, res: Response): Promise<Response> => {
+    const date = req.query.date || this.today
+
+    const result = await this.LI.atualizacoes_detalhadas(date.toString())
   
     return res.json({ status: 200, message: 'Ok', data: result })
-  },
+  }
 
-  async detalhe_pedido (req: Request, res: Response) {
+  detalhe_pedido = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params
 
-    const result = await LI.detalhe_pedido(parseInt(id))
+    const result = await this.LI.detalhe_pedido(parseInt(id))
   
     return res.json({ status: 200, message: 'Ok', data: result })
-  },
+  }
 
-  async pedidos_criados (req: Request, res: Response) {
-    const date = req.query.date || today
+  pedidos_criados = async (req: Request, res: Response): Promise<Response> => {
+    const date = req.query.date || this.today
 
-    const result = await LI.pedidos_criados_detalhados(date.toString())
+    const result = await this.LI.pedidos_criados_detalhados(date.toString())
   
     return res.json({ status: 200, message: 'Ok', data: result })
-  },
+  }
 
-  async resumo (req: Request, res: Response) {
-    const date = req.query.date || today
+  resumo = async (req: Request, res: Response): Promise<Response> => {
+    const date = req.query.date || this.today
 
-    const result = await LI.resumo_atualizacoes(date.toString())
+    const result = await this.LI.resumo_atualizacoes(date.toString())
   
     return res.json({ status: 200, message: 'Ok', data: result })
   }

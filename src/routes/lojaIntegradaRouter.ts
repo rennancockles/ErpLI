@@ -1,11 +1,21 @@
 import { Router } from "express-serve-static-core";
-import LojaIntegradaController from '../controllers/LojaIntegradaController';
+import { LojaIntegrada } from "../api/li/LojaIntegrada";
+import { LojaIntegradaController } from '../controllers/LojaIntegradaController';
 
-export const liRouter = {
-  addRoutes: (router: Router) => {
-    router.get('/li', LojaIntegradaController.atualizacoes)
-    router.get('/li/pedidos', LojaIntegradaController.pedidos_criados)
-    router.get('/li/resumo', LojaIntegradaController.resumo)
-    router.get('/li/pedido/:id', LojaIntegradaController.detalhe_pedido)
+export class LojaIntegradaRouter {
+  private controller
+
+  constructor () {
+    const api_key = process.env.LI_API_KEY || '' 
+    const LI = new LojaIntegrada(api_key)
+
+    this.controller = new LojaIntegradaController(LI)
+  }
+  
+  addRoutes = (router: Router): void => {
+    router.get('/li', this.controller.atualizacoes)
+    router.get('/li/pedidos', this.controller.pedidos_criados)
+    router.get('/li/resumo', this.controller.resumo)
+    router.get('/li/pedido/:id', this.controller.detalhe_pedido)
   }
 }

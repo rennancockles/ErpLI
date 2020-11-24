@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { liRouter } from './lojaIntegradaRouter'
+import { LojaIntegradaRouter } from './lojaIntegradaRouter'
 
 const router = Router()
 
-liRouter.addRoutes(router)
+new LojaIntegradaRouter().addRoutes(router)
 
 export { router }
