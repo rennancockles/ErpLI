@@ -1,5 +1,4 @@
-import { IAtualizacaoDetalhadaResponse, IHistoricoSituacaoObject, IPedidoDetalheResponse, IPedidoResponseObject } from "./Responses";
-import { IResumoResponse } from "./Responses/IResumoResponse";
+import { IAtualizacaoDetalhadaResponse, IHistoricoSituacaoObject, IPedidoDetalheResponse, IPedidoResponseObject, IResumoResponse } from "./Responses";
 
 export interface ILojaIntegrada {
   pedidos_criados(date: string, offset: number): Promise<IPedidoResponseObject[]>

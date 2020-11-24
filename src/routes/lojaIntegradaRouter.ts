@@ -12,10 +12,10 @@ export class LojaIntegradaRouter {
     this.controller = new LojaIntegradaController(LI)
   }
   
-  addRoutes = (router: Router): void => {
-    router.get('/li', this.controller.atualizacoes)
-    router.get('/li/pedidos', this.controller.pedidos_criados)
-    router.get('/li/resumo', this.controller.resumo)
-    router.get('/li/pedido/:id', this.controller.detalhe_pedido)
+  addRoutes = (router: Router, rootPath: string = ''): void => {
+    router.get(`${rootPath}`, this.controller.atualizacoes)
+    router.get(`${rootPath}/pedidos`, this.controller.pedidos_criados)
+    router.get(`${rootPath}/resumo`, this.controller.resumo)
+    router.get(`${rootPath}/pedido/:id`, this.controller.detalhe_pedido)
   }
 }
