@@ -20,7 +20,8 @@ export class createStores1606322651039 implements MigrationInterface {
         },
         {
           name: 'api_key',
-          type: 'varchar'
+          type: 'varchar',
+          isUnique: true
         },
       ]
     }))
