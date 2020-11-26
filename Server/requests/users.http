@@ -1,0 +1,28 @@
+@host = localhost:3333
+@basePath = usuarios
+
+# List
+GET /{{basePath}} HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+###
+
+# Get
+GET /{{basePath}}/1 HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+###
+
+# Create
+POST /{{basePath}} HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+
+{
+  "name": "Rennan",
+  "lastname": "Cockles",
+  "email": "rennan@teste",
+  "password": "123456",
+  "store_id": 1
+}
+###
