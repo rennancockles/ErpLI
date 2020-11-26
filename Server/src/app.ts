@@ -4,12 +4,13 @@ import 'express-async-errors';
 
 import './database/connection'
 import { router } from './routes'
-import errorHandler from './errors/handler'
+import { authHandler, errorHandler } from './middlewares'
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(authHandler)
 app.use(router)
 app.use(errorHandler)
 

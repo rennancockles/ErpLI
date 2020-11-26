@@ -1,0 +1,28 @@
+@host = localhost:3333
+@basePath = auth
+
+# Login
+POST /{{basePath}}/login HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+
+{
+  "email": "rennan@teste.com",
+  "password": "123456"
+}
+###
+
+# Register
+POST /{{basePath}}/register HTTP/1.1
+Host: {{host}}
+Content-Type: application/json
+
+{
+  "name": "Rennan",
+  "lastname": "Cockles",
+  "email": "rennan@teste.com",
+  "password": "123456",
+  "store_name": "Ornato Shop",
+  "api_key": "abc123"
+}
+###
