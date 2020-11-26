@@ -1,6 +1,6 @@
 import { Router } from "express-serve-static-core";
-import { LojaIntegrada } from "../api/li/LojaIntegrada";
-import { LojaIntegradaController } from '../controllers/LojaIntegradaController';
+import { LojaIntegrada } from "../../api/li/LojaIntegrada";
+import { LojaIntegradaController } from '../../controllers/LojaIntegradaController';
 
 export class LojaIntegradaRouter {
   private controller

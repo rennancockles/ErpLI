@@ -1,7 +1,7 @@
 import { Router } from "express-serve-static-core";
-import { Correios } from "../api/correios/Correios";
-import { CorreiosController } from '../controllers/CorreiosController';
-import { IRouter } from "../interfaces/IRouter";
+import { Correios } from "../../api/correios/Correios";
+import { CorreiosController } from '../../controllers/CorreiosController';
+import { IRouter } from "../../interfaces/IRouter";
 
 export class CorreiosRouter implements IRouter {
   private controller

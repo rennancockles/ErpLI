@@ -1,19 +1,16 @@
 import { Router } from "express";
 
-import { LojaIntegradaRouter } from './LojaIntegradaRouter'
-import { CorreiosRouter } from './CorreiosRouter'
+import { CorreiosRouter, LojaIntegradaRouter } from './services'
 
 import { AuthRouter } from './AuthRouter'
-import { StoreRouter } from './StoreRouter'
 import { UserRouter } from './UserRouter'
 
 const router = Router()
 
-new LojaIntegradaRouter().addRoutes(router, '/li')
-new CorreiosRouter().addRoutes(router, '/correios')
+new LojaIntegradaRouter().addRoutes(router, '/service/li')
+new CorreiosRouter().addRoutes(router, '/service/correios')
 
 new AuthRouter().addRoutes(router, '/auth')
-new StoreRouter().addRoutes(router, '/lojas')
-new UserRouter().addRoutes(router, '/usuarios')
+new UserRouter().addRoutes(router, '/users')
 
 export { router }
