@@ -58,7 +58,7 @@ export class AuthController {
       expiresIn: '24h'
     })
 
-    res.setHeader('X-Token', token)
+    res.setHeader('X-AuthToken', `Bearer ${token}`)
     
     return res.status(200).json(userView.render(user))
   }

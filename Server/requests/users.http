@@ -1,22 +1,22 @@
 @host = localhost:3333
-@basePath = usuarios
-@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInNpZCI6MSwiaWF0IjoxNjA2NDE1OTEzLCJleHAiOjE2MDY1MDIzMTN9.EJz7iTl9koKSYo6fecvvlOIm-pvsTLC_yG_mIUn6n3o
+@basePath = users
+@authToken = Bearer xxx
 
-# List
+# @name List
 GET /{{basePath}} HTTP/1.1
 Host: {{host}}
 Content-Type: application/json
 Authorization: {{authToken}}
 ###
 
-# Get
+# @name Get
 GET /{{basePath}}/1 HTTP/1.1
 Host: {{host}}
 Content-Type: application/json
 Authorization: {{authToken}}
 ###
 
-# Create
+# @name Create
 POST /{{basePath}} HTTP/1.1
 Host: {{host}}
 Content-Type: application/json
@@ -26,7 +26,6 @@ Authorization: {{authToken}}
   "name": "Rennan",
   "lastname": "Cockles",
   "email": "rennan@teste.com",
-  "password": "123456",
-  "store_id": 1
+  "password": "123456"
 }
 ###

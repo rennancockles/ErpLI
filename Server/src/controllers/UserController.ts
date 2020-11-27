@@ -8,34 +8,43 @@ import { userView } from '../views';
 export class UserController {
 
   list = async (req: Request, res: Response): Promise<Response> => {
+    const { storeId } = res.locals
     const repository = getCustomRepository(UserRepository)
 
-    const users = await repository.find({
+    let users = await repository.find({
+      where: { store: { id: storeId } },
       relations: ['store']
     });
-
+    
     return res.json(userView.renderMany(users));
   }
 
   get = async (req: Request, res: Response): Promise<Response> => {
-    const  { id } = req.params;
+    const { storeId } = res.locals
+    const { id } = req.params
 
     const repository = getCustomRepository(UserRepository)
 
-    const user = await repository.findOneOrFail(id, {
-      relations: ['store']
-    });
+    const user = await repository.findOneOrFail(
+      { 
+        id: parseInt(id), 
+        store: { id: storeId } 
+      }, 
+      {
+        relations: ['store']
+      }
+    );
 
     return res.json(userView.render(user));
   }
 
-  create = async (req: Request, res: Response): Promise<Response> => {      
+  create = async (req: Request, res: Response): Promise<Response> => {  
+    const { storeId } = res.locals    
     const {
       name,
       lastname,
       email,
-      password,
-      store_id
+      password
     } = req.body;
 
     const userData: IUserRequest = {
@@ -43,7 +52,7 @@ export class UserController {
       lastname,
       email,
       password,
-      store_id
+      store_id: storeId
     }
 
     await UserSchema.validate(userData, {
