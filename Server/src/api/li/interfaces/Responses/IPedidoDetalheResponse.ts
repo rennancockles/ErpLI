@@ -3,7 +3,7 @@ import { ICliente, IEnderecoEntrega, IEnvio, IItem, IPagamento, ISituacao } from
 export interface IPedidoDetalheResponse {
   cliente: ICliente
   cliente_obs: string
-  cupom_dedsconto: string
+  cupom_desconto: string
   data_criacao: string
   data_expiracao: string
   data_modificacao: string

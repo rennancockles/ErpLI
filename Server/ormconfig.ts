@@ -6,12 +6,12 @@ export default {
   "password": process.env.DB_PWD,
   "database": process.env.DB_DATABASE,
   "entities": [
-     "./src/models/**/*.ts"
+     "src/models/index.ts"
   ],
   "migrations": [
-     "./src/database/migrations/**/*.ts"
+     "src/database/migrations/**/*.ts"
   ],
   "cli": {
-      "migrationsDir": "./src/database/migrations"
+      "migrationsDir": "src/database/migrations"
   }
 }

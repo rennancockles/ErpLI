@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
-import User from './User'
+import { Pedido, User } from '.'
 
 @Entity('stores')
 export default class Store {
@@ -15,4 +15,8 @@ export default class Store {
   @OneToMany(() => User, user => user.store)
   @JoinColumn({ name: 'store_id'})
   users: User[];
+
+  @OneToMany(() => Pedido, pedido => pedido.store)
+  @JoinColumn({ name: 'store_id'})
+  pedidos: Pedido[];
 }

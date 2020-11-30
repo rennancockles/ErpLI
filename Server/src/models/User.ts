@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import * as Yup from 'yup';
-import Store from './Store'
+import { Store } from '.'
 
 @Entity('users')
 export default class User {
