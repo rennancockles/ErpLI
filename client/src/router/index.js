@@ -13,8 +13,15 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: { name: 'home' }
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: Home,
+    meta: {
+      auth: true
+    }
   },
   ...authRoutes
 ]
@@ -23,6 +30,23 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const needAuth = to.matched.some(record => record.meta.auth)
+
+  if (needAuth) {
+    if (!Vue.prototype.$storage.isLoggedIn()) {
+      router.push({
+        path: '/auth/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

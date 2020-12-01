@@ -14,6 +14,14 @@ const routes = [
     meta: {
       auth: true
     }
+  },
+  {
+    path: '/auth/register',
+    name: 'auth.register',
+    component: () => import(/* webpackChunkName: "auth" */ '@/views/auth/Register.vue'),
+    meta: {
+      auth: false
+    }
   }
 ]
 

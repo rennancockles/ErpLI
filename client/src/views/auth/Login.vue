@@ -38,10 +38,10 @@
 
         <v-card-actions>
           <div class="ml-3">
-            <p class="caption mb-0">
+            <!-- <p class="caption mb-0">
               Esqueceu sua senha?
               <a href="" @click.prevent="recover()">Recupere</a>
-            </p>
+            </p> -->
             <p class="caption mb-0">
               Não possui conta?
               <router-link tag="a" to="/auth/register">Cadastre-se</router-link>
