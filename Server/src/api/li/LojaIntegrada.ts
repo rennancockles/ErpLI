@@ -12,6 +12,37 @@ export class LojaIntegrada implements ILojaIntegrada {
     this.api = new LojaIntegradaAPI(api_key)
   }
 
+  async pedidos_pagos(offset: number = 0): Promise<IPedidoResponseObject[]> {
+    const params: IListarPedidosParams = {
+      offset,
+      situacao_id: 4
+    }
+
+    const response = await this.api.listar_pedidos(params)
+
+    const pedidos = response.objects
+
+    if (pedidos.length === response.objects.length && response.meta.next) {
+      const proximosPedidos = await this.pedidos_pagos(offset + 20)
+      pedidos.push(...proximosPedidos)
+    }
+
+    return pedidos
+  }
+
+  async pedidos_pagos_detalhados(): Promise<IPedidoDetalheResponse[]> {
+    const detalhes: IPedidoDetalheResponse[] = []
+    const pedidos = await this.pedidos_pagos()
+
+    for (let index = 0; index < pedidos.length; index++) {
+      const pedido = pedidos[index]
+      const pedidoDetalhado = await this.api.detalhes_do_pedido(pedido.numero)
+      detalhes.push(pedidoDetalhado)
+    }
+
+    return detalhes
+  }
+
   async pedidos_criados(date: string, offset: number = 0): Promise<IPedidoResponseObject[]> {
     const params: IListarPedidosParams = {
       offset,
