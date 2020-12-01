@@ -7,7 +7,9 @@ import { authHandler, errorHandler } from './middlewares'
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  exposedHeaders: 'X-AuthToken',
+}))
 app.use(express.json())
 app.use(authHandler)
 app.use(router)

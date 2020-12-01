@@ -1,61 +1,71 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <Toolbar v-if="isLoggedIn && !isAuthPage" />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
+    <v-main class="default">
+      <v-container :class="fillHeight">
+        <router-view></router-view>
+      </v-container>
     </v-main>
+
+    <v-footer app>
+      <div>{{ version }}</div>
+      <v-spacer></v-spacer>
+      <div>R3Ck &copy; {{ currentYear }}</div>
+    </v-footer>
   </v-app>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import { mapActions, mapGetters } from 'vuex'
+import Toolbar from '@/components/nav/Toolbar.vue'
 
-export default Vue.extend({
+export default {
   name: 'App',
 
   components: {
-    HelloWorld
+    Toolbar
   },
 
   data: () => ({
     //
-  })
-})
+  }),
+  computed: {
+    ...mapGetters(['isLoggedIn', 'loading']),
+    currentYear () {
+      return new Date().getFullYear()
+    },
+    version () {
+      return process.env.VUE_APP_VERSION
+    },
+    isAuthPage () {
+      return (this.$route.name || '').includes('auth')
+    },
+    fillHeight () {
+      return this.isAuthPage ? 'fill-height' : ''
+    }
+  },
+
+  methods: {
+    ...mapActions([
+      'setUser',
+      'setIsLoggedIn'
+    ]),
+    redirectLogin () {
+      this.$router.push({ name: 'auth.login' })
+    }
+  },
+
+  created () {
+    this.setIsLoggedIn(this.$storage.isLoggedIn())
+
+    if (this.isLoggedIn) {
+      const user = this.$storage.getUser()
+
+      this.setUser(user)
+    } else {
+      this.redirectLogin()
+    }
+  }
+}
 </script>
